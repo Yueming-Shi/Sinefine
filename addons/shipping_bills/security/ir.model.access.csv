@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_shipping_bill,access_shipping_bill,model_shipping_bill,base.group_partner_manager,1,1,1,1
+access_shipping_factor,access_shipping_factor,model_shipping_factor,base.group_partner_manager,1,1,1,1
+access_crm_team,access.crm.team,model_crm_team,base.group_partner_manager,1,1,1,1
+access_shipping_bill_update_transport_wizard,access.shipping.bill.update.transport.wizard,model_shipping_bill_update_transport_wizard,base.group_partner_manager,1,1,1,
+access_shipping_bill_update_arrive_wizard,access_shipping_bill_update_arrive_wizard,model_shipping_bill_update_arrive_wizard,base.group_partner_manager,1,1,1,1
+access_shipping_bill_update_sign_wizard,access_shipping_bill_update_sign_wizard,model_shipping_bill_update_sign_wizard,base.group_partner_manager,1,1,1,1

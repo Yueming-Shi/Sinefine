@@ -1,0 +1,28 @@
+<odoo>
+    <record id="sale_order_form_view" model="ir.ui.view">
+        <field name="name">sale.order.form.view</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <notebook position="before">
+                <group>
+                    <group>
+                        <field name="shipping_no" />
+                        <field name="fetch_no" />
+                        <field name="partner_team_site_id"/>
+                        <field name="partner_team_site_contact_address"/>
+                        <field name="shipping_bill_id"/>
+                    </group>
+
+                    <group>
+                        <field name="is_received"/>
+                        <field name="is_valued"/>
+                        <field name="is_paid"/>
+                        <field name="is_transported"/>
+                        <field name="is_confirmed"/>
+                    </group>
+                </group>
+            </notebook>
+        </field>
+    </record>
+</odoo>

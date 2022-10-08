@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo><data>
+        <record id="res_config_settings_view_form" model="ir.ui.view">
+            <field name="name">微信公众号AppId等设置</field>
+            <field name="model">res.config.settings</field>
+            <field name="inherit_id" ref="base_setup.res_config_settings_view_form"/>
+            <field name="arch" type="xml">
+                <div name="integration" position="inside">
+                    <div class="col-12 col-lg-6 o_setting_box" id="sync_wechat_bizmsg_setting">
+                        <div class="o_setting_left_pane"> 
+                        </div>
+                        <div class="o_setting_right_pane">
+                        	<div class="o_form_label" >
+                                   微信公众号消息集成
+                            </div>
+				    <div class="mt16 row">
+	                            <label for="wechat_appid" string="AppID" class="col-3 col-lg-3 o_light_label"/>
+	                            <field name="wechat_appid" nolabel="1"/>
+	                            <label for="wechat_appsecret" string="Appsecret" class="col-3 col-lg-3 o_light_label"/>
+	                            <field name="wechat_appsecret" password="True" nolabel="1"/>
+	                            <label for="wechat_token" string="Token" class="col-3 col-lg-3 o_light_label"/>
+	                            <field name="wechat_token" nolabel="1"/>
+	                        </div>
+                        </div>
+                    </div>
+                </div>
+            </field>
+        </record>
+</data></odoo>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--待认领-->
+    <template id="web_zhaogu_advance.web_zhaogu_be_claimed_tree" name="待认领">
+        <t t-call="website.layout">
+          <meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+            <link rel="stylesheet" type="text/css" href="/web_zhaogu_advance/static/src/css/portal_orders.css"/>
+            <div style="height:60px;line-height:60px;text-align:center;">
+                <span style="font-weight:bold;font-size:24px;">待认领</span>
+            </div>
+            <table class="table-o">
+                <tr>
+                    <th>运单号</th>
+                    <th>入库日期</th>
+                    <th></th>
+                </tr>
+                <t t-foreach="shipping_orders" t-as="shipping_order">
+                    <tr>
+                        <td><t t-esc="shipping_order.name"/></td>
+                        <td><t t-esc="shipping_order.in_date"/></td>
+                        <td><a class="shippping-a" t-attf-href="/order/nocustomer?waybill_no={{shipping_order.name}}">认领</a></td>
+                    </tr>
+                </t>
+            </table>
+            <div style="margin:0 auto;padding:20px 0;text-align:center;">
+              <a href="#" class="shippping-a" onClick="javascript :history.back(-1)">返回上一页</a>
+            </div>
+        </t>
+    </template>
+</odoo>

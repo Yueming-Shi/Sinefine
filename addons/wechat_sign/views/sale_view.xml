@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- sale.team inherit form view -->
+    <record id="view_id" model="ir.ui.view">
+        <field name="name">crm.team.inherit.view.form</field>
+        <field name="model">crm.team</field>
+        <field name="inherit_id" ref="sales_team.crm_team_view_form"/>
+        <field name="arch" type="xml">
+            <!-- Add your xpath here -->
+            <xpath expr="//notebook" position="inside">
+                <!-- Add your fields here -->
+                <page name="Qcode" string="站点二维码">
+                    <group string="Qrcode" name="qrcode">
+                        <label for="qrcode"/>
+                        <div class="o_row">
+                            <field name="qrcode" widget="image"/>
+                        </div>
+                        <button name="generate_qrcode" type="object" string="生成二维码"/>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

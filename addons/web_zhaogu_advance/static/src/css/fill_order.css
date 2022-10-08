@@ -1,0 +1,63 @@
+form {
+  width:350px;
+  margin:0 auto;
+}
+a{
+  text-decoration:none;
+  font-size:10px;
+  color:#E3170D;
+}
+a:visited {
+    color: #E3170D;
+}
+label {
+  font-family: 'PingFang SC';
+  font-style: normal;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 22px;
+  color: rgba(24, 24, 27, 0.65);
+}
+.form-control-input {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0px 16px 0px 14px;
+  gap: 12px;
+  height: 44px;
+  background: #FFFFFF;
+  border: 1px solid rgba(24, 24, 27, 0.25);
+  box-shadow: 0px 1px 2px rgba(16, 24, 40, 0.05);
+  border-radius: 8px;
+  outline:none;
+  width:100%;
+}
+.sub-butn{
+  font-family: 'PingFang SC';
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  margin:10px auto;
+  background: #E3170D;
+  box-shadow: 0px 12px 16px -4px rgba(16, 24, 40, 0.08), 0px 4px 6px rgba(16, 24, 40, 0.05);
+  border:none;
+  padding: 6px 20px;
+  border-radius: 20px;
+  color: white;
+}
+.table-o {
+  width:100%;
+  font-size:10px;
+  text-align:center;
+  margin:20px 0;
+  border-collapse: collapse;
+}
+.table-o tr th{
+border:none;
+  padding:5px;
+}
+.table-o tr td{
+  border-top:1px solid black;
+  padding:5px;
+}

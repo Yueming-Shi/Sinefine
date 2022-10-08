@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--运单详情-->
+    <template id="web_zhaogu_advance.web_zhaogu_shipping_detail_form" name="运单详情">
+        <t t-call="website.layout">
+          <meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+          <link rel="stylesheet" type="text/css" href="/web_zhaogu_advance/static/src/css/portal_orders.css"/>
+          <div id="wrap">
+            <div style="height:60px;line-height:60px;text-align:center;">
+                <span style="font-weight:bold;font-size:24px;">运单详情</span>
+            </div>
+            <div style="margin: 0 20px;">
+              <div>
+                <span>包裹快递单号：<span t-field="shipping_order.name"/></span>
+              </div>
+              <div t-if="shipping_order.state not in ['valued', 'returned']">
+                <span>站点编号：<span t-field="shipping_order.sale_site_id.name"/></span>
+              </div>
+              <div t-if="shipping_order.state in ['arrived', 'signed']">
+                <span>取件码：<span t-field="shipping_order.sale_fetch_no"/></span>
+              </div>
+              <div t-if="shipping_order.state == 'valued'">
+                <span>是否购买保险：
+                  <t t-if="shipping_order.has_bought_safety">
+                      <span>是</span>
+                  </t>
+                  <t t-else="">
+                      <span>否</span>
+                  </t>
+                </span>
+              </div>
+              <div t-if="shipping_order.state in ['valued','returned']">
+                <span>总费用：<t t-esc="shipping_order.fee"/></span>
+              </div>
+              <div t-if="shipping_order.state in ['valued','returned']">
+                <span>体积：<span t-esc="shipping_order.length * shipping_order.width * shipping_order.height"/></span>
+              </div>
+              <div t-if="shipping_order.state == 'valued'">
+                <span>入库日期：<span t-field="shipping_order.in_date"/></span>
+              </div>
+              <div t-if="shipping_order.state in ['valued','returned']">
+                <span>实重（kg）：<span t-field="shipping_order.actual_weight"/></span>
+              </div>
+              <div t-if="shipping_order.state in ['valued','returned']">
+                <span>包裹长度（cm）：<span t-field="shipping_order.length"/></span>
+              </div>
+              <div t-if="shipping_order.state in ['valued','returned']">
+                <span>包裹宽度（cm）：<span t-field="shipping_order.width"/></span>
+              </div>
+              <div t-if="shipping_order.state in ['valued','returned']">
+                <span>包裹高度（cm）：<span t-field="shipping_order.height"/></span>
+              </div>
+              <div t-if="shipping_order.state in ['valued','returned']">
+                <span>入库包裹内容：</span>
+              </div>
+              <div t-if="shipping_order.state == 'valued'">
+                <span>是否可改泡：
+                    <t t-if="shipping_order.can_change">
+                      <span>是</span>
+                    </t>
+                    <t t-else="">
+                      <span>否</span>
+                    </t>
+                </span>
+              </div>
+              <div t-if="shipping_order.state == 'transported'">
+                <span>发货日期：<span t-field="shipping_order.out_date"/></span>
+              </div>
+              <div t-if="shipping_order.state == 'transported'">
+                <span>国际物流追踪码：<span t-field="shipping_order.tracking_no"/></span>
+              </div>
+              <div t-if="shipping_order.state == 'arrived'">
+                <span>站点签收状态：
+                <span t-if="shipping_order.arrived_date">已签收</span>
+                <span t-else="">未签收</span>
+              </span>
+              </div>
+              <div t-if="shipping_order.state == 'arrived'">
+                <span t-if="shipping_order.arrived_date">站点签收日期：<span t-field="shipping_order.arrived_date"/></span>
+              </div>
+              <div t-if="shipping_order.state == 'signed'">
+                <span>客户包裹签收：
+                  <span t-if="shipping_order.signed_date">已签收</span>
+                  <span t-else="">未签收</span>
+                </span>
+              </div>
+              <div t-if="shipping_order.state == 'signed'">
+                <span t-if="shipping_order.signed_date">客户签收日期：<span t-field="shipping_order.signed_date"/></span>
+              </div>
+
+              <div  t-if="shipping_order.state != 'arrived'">
+                <hr/>
+                <div style="text-align:center;">
+                  <span style="font-weight:bold;font-size:24px;">包裹内容</span>
+                </div>
+                <hr/>
+                <table class="table-o">
+                    <t t-if="shipping_order.sale_order_id.order_line">
+                        <tr>
+                            <th>产品</th>
+                            <th>材质</th>
+                            <th>品牌</th>
+                            <th>数量</th>
+                        </tr>
+                        <t t-foreach="shipping_order.sale_order_id.order_line" t-as="line">
+                            <tr>
+                                <td><t t-esc="line.product_id.name"/></td>
+                                <td><t t-esc="line.product_material_id.name"/></td>
+                                <td><t t-esc="line.product_brand_id.name"/></td>
+                                <td><t t-esc="line.product_qty"/></td>
+                            </tr>
+                        </t>
+                    </t>
+                </table>
+              </div>
+
+            </div>
+          </div>
+        </t>
+    </template>
+</odoo>

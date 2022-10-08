@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="sale_portal_fill_order_template">
+        <t t-call="website.layout">
+          <meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+            <link rel="stylesheet" type="text/css" href="/zhaogu_sale/static/src/css/fill_order.css"/>
+            <div style="height:60px;line-height:60px;text-align:center;">
+                <span style="font-weight:bold;font-size:24px;">包裹预报</span>
+            </div>
+            <form>
+                <div>
+                    <input type="hidden" name="order_id" t-att-value="order_id"/>
+                </div>
+                <div class="form-group field-name" style="margin:10px 0;">
+                    <label for="name">用户</label>
+                    <span class="s_website_form_mark" style="color:#1A67FF;"> *</span>
+                    <div class="row">
+                        <div class="col-12">
+                            <input type="text" name="user_name" t-att-value="user_name" disabled="disabled" class="form-control-input form-control-sm"/>
+                        </div>
+                    </div>
+                </div>
+
+                <t t-if="error_message">
+                    <div>
+                        <span>错误信息:</span>
+                        <input type="text" name="error_message" t-att-value="error_message" disabled="disabled" class="form-control-input form-control-sm"/>
+                    </div>
+                </t>
+                <div class="form-group field-name" style="margin:10px 0;">
+                    <label for="name">运单号:</label>
+                    <span class="s_website_form_mark" style="color:#1A67FF;"> *</span>
+                    <div class="row">
+                        <div class="col-12">
+                            <input type="text" name="shipping_no" t-att-value="shipping_no" readonly="readonly" class="form-control-input form-control-sm"/>
+                        </div>
+                    </div>
+                </div>
+                <table class="table-o">
+                    <t t-if="lines">
+                        <tr>
+                            <th>产品</th>
+                            <th>材质</th>
+                            <th>品牌</th>
+                            <th>数量</th>
+                            <th/>
+                            <th/>
+                        </tr>
+                        <t t-foreach="lines" t-as="line">
+                            <tr>
+                                <td><t t-esc="line['product_sale_category_name']"/></td>
+                                <td><t t-esc="line['product_material_name']"/></td>
+                                <td><t t-esc="line['product_brand_name']"/></td>
+                                <td><t t-esc="line['product_qty']"/></td>
+                                <td><a class="shippping-a" t-att-href="line['edit_url']">编辑</a></td>
+                                <td><a class="shippping-a" t-att-href="line['delete_url']">删除</a></td>
+                            </tr>
+                        </t>
+                    </t>
+                </table>
+                <div style="display:flex;">
+                    <input type="submit" class="sub-butn" value="添加明细" formaction="/sale/portal/fill_order_line"/>
+                    <input type="submit" class="sub-butn" value="提交" formaction="/sale/portal/save"/>
+                </div>
+            </form>
+            <div style="margin:0 auto;padding:20px 0;text-align:center;">
+              <a class="shippping-a" href="#" onClick="javascript :history.back(-1)">返回上一页</a>
+            </div>
+        </t>
+    </template>
+
+    <template id="sale_portal_fill_order_create_template">
+        <t t-call="website.layout">
+          <meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+            <link rel="stylesheet" type="text/css" href="/zhaogu_sale/static/src/css/fill_order.css"/>
+            <div style="height:60px;line-height:60px;text-align:center;">
+                <span style="font-weight:bold;font-size:24px;">包裹预报</span>
+            </div>
+            <form action="/sale/create/documents" method="post">
+                <input type="hidden" name="csrf_token" id="csrf-token" t-att-value="request.csrf_token()"/>
+                <div class="form-group field-name" style="margin:10px 0;">
+                    <label for="name">用户</label>
+                    <span class="s_website_form_mark" style="color:#1A67FF;"> *</span>
+                    <div class="row">
+                        <div class="col-12">
+                            <input type="text" name="user_name" t-att-value="user_name" disabled="disabled" class="form-control-input form-control-sm"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group field-name" style="margin:10px 0;">
+                    <label for="name">运单号:</label>
+                    <span class="s_website_form_mark" style="color:#1A67FF;"> *</span>
+                    <div class="row">
+                        <div class="col-12">
+                            <input type="text" name="shipping_no" t-att-value="waybill_no" class="form-control-input form-control-sm"/>
+                        </div>
+                    </div>
+                </div>
+                <t t-if="error_message">
+                    <div>
+                        <span>错误信息:</span>
+                        <input type="text" name="error_message" t-att-value="error_message" disabled="disabled" class="form-control-input form-control-sm"/>
+                    </div>
+                </t>
+                <div style="display:flex;">
+                    <input type="submit" class="sub-butn" value="提交"/>
+                </div>
+            </form>
+            <div style="margin:0 auto;padding:20px 0;text-align:center;">
+              <a class="shippping-a" href="#" onClick="javascript :history.back(-1)">返回上一页</a>
+            </div>
+        </t>
+    </template>
+
+    <template id="sale_portal_fill_order_line_template">
+        <t t-call="website.layout">
+        <script crossorigin="anonymous" integrity="sha512-n/4gHW3atM3QqRcbCn6ewmpxcLAHGaDjpEBu4xZd47N0W2oQ+6q7oc3PXstrJYXcbNU1OHdQ1T7pAP+gi5Yu8g==" src="https://lib.baomitu.com/jquery/3.6.0/jquery.js">
+          </script>
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet"/>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"/>
+        <script>
+          $(document).ready(function(){
+            $('#product-brand-id').select2()
+          })
+        </script>
+        <style>
+          .select2-selection {
+            height:44px !important;
+          }
+          .select2-selection__arrow {
+            height: 44px !important;
+          }
+          .select2-selection__rendered {
+          	height: 44px !important;
+          }
+        </style>
+        <meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+            <link rel="stylesheet" type="text/css" href="/zhaogu_sale/static/src/css/fill_order_line.css"/>
+            <div style="height:60px;line-height:60px;text-align:center;">
+                <span style="font-weight:bold;font-size:24px;">添加明细</span>
+            </div>
+            <form>
+                <div>
+                    <input type="hidden" name="order_id" t-att-value="order_id"/>
+                    <input type="hidden" name="order_line_id" t-att-value="order_line_id"/>
+                    <input type="hidden" name="shipping_no" t-att-value="shipping_no"/>
+                </div>
+                <div t-if="error_message" class="form-group field-name">
+                    <label for="name">错误信息:</label>
+                    <div class="row">
+                        <div class="col-12">
+                          <input type="text" name="error_message" class="form-control-input form-control-sm" t-att-value="error_message" disabled="disabled"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group field-name">
+                    <label for="name">销售分类</label>
+                    <span class="s_website_form_mark" style="color:#1A67FF;"> *</span>
+                    <div class="row">
+                        <div class="col-12">
+                          <select name="sale_category_id" class="form-control-input form-control-sm">
+                              <option value="0"/>
+                              <option t-foreach="sale_categories" t-as="category" t-att-value="category[0]" t-esc="category[1]" t-att-selected="str(category[0])==str(sale_category_id)"/>
+                          </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group field-name">
+                    <label for="name">品牌:</label>
+                    <span class="s_website_form_mark" style="color:#1A67FF;"> *</span>
+                    <div class="row">
+                        <div class="col-12">
+                          <select name="product_brand_id" id="product-brand-id" class="form-control-input form-control-sm" style="height:44px;">
+                              <option value="0"/>
+                              <option t-foreach="product_brands" t-as="brand" t-att-value="brand[0]" t-esc="brand[1]" t-att-selected="str(brand[0])==str(product_brand_id)"/>
+                          </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group field-name">
+                    <label for="name">材质:</label>
+                    <span class="s_website_form_mark" style="color:#1A67FF;"> *</span>
+                    <div class="row">
+                        <div class="col-12">
+                          <select name="product_material_id" class="form-control-input form-control-sm">
+                              <option value="0"/>
+                              <option t-foreach="product_materials" t-as="material" t-att-value="material[0]" t-esc="material[1]" t-att-selected="str(material[0])==str(product_material_id)"/>
+                          </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group field-name">
+                    <label for="name">数量:</label>
+                    <span class="s_website_form_mark" style="color:#1A67FF;"> *</span>
+                    <div class="row">
+                        <div class="col-12">
+                          <input type="text" name="qty" class="form-control-input form-control-sm" t-att-value="qty"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="btn-div">
+                  <t t-if="order_line_id">
+                    <input type="submit" class="sub-butn" value="修改" formaction="/sale/portal/save_line/"/>
+                  </t>
+                  <t t-if="not order_line_id">
+                      <input type="submit" class="sub-butn" value="添加" formaction="/sale/portal/save_line/"/>
+                  </t>
+                  <input type="submit" class="sub-butn" value="返回" formaction="/sale/portal/fill_order/"/>
+                </div>
+            </form>
+        </t>
+    </template>
+
+    <template id="sale_portal_orders_template">
+        <t t-call="website.layout">
+          <meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+            <link rel="stylesheet" type="text/css" href="/zhaogu_sale/static/src/css/portal_orders.css"/>
+            <div style="height:60px;line-height:60px;text-align:center;">
+                <span style="font-weight:bold;font-size:24px;">已登记订单</span>
+            </div>
+            <table class="table-o">
+                <tr>
+                    <th>包裹快递单号</th>
+                    <th>站点编号</th>
+                    <th>预报日期</th>
+                    <th/>
+                </tr>
+                <t t-foreach="sale_orders" t-as="sale_order">
+                    <tr>
+                        <td><t t-esc="sale_order.shipping_no"/></td>
+                        <td><t t-esc="sale_order.partner_team_site_id.name"/></td>
+                        <td><t t-esc="sale_order.create_date.strftime('%Y-%m-%d')"/></td>
+<!--                        <td><a t-att-href="sale_order.get_base_url()+'/sale/portal/fill_order?order_id='+str(sale_order.id)">跳转</a></td>-->
+                        <td><a class="shippping-a" t-att-href="'/sale/portal/fill_order?order_id='+str(sale_order.id)">跳转</a></td>
+                    </tr>
+                </t>
+            </table>
+            <div style="margin:0 auto;padding:20px 0;text-align:center;">
+              <a href="#" class="shippping-a" onClick="javascript :history.back(-1)">返回上一页</a>
+            </div>
+        </t>
+    </template>
+
+
+
+</odoo>

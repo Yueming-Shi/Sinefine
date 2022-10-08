@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--待支付-->
+    <template id="web_zhaogu_advance.web_zhaogu_be_paid_tree" name="待支付">
+        <t t-call="website.layout">
+          <meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+            <link rel="stylesheet" type="text/css" href="/web_zhaogu_advance/static/src/css/portal_orders.css"/>
+            <script src="https://lib.sinaapp.com/js/jquery/2.0.2/jquery-2.0.2.min.js"/>
+            <script src="/web_zhaogu_advance/static/src/js/be_paid.js"/>
+            <div style="height:60px;line-height:60px;text-align:center;">
+                <span style="font-weight:bold;font-size:24px;">待支付订单</span>
+            </div>
+            <table class="table-o">
+                <tr>
+                    <th>包裹快递号</th>
+                    <th>总费用</th>
+                    <th/>
+                    <th/>
+                </tr>
+                <t t-foreach="shipping_orders" t-as="shipping_order">
+                    <tr>
+                        <td><t t-esc="shipping_order.name"/></td>
+                        <td><t t-esc="shipping_order.fee"/></td>
+                        <td>
+                          <div style="display:flex;">
+                            <a t-attf-href="/payment/shipping?order={{shipping_order.id}}" style="margin-right:10px;"><button class="sub-butn">支付</button></a>
+                            <a t-attf-href="/rebubble/shipping?order={{shipping_order.id}}" style="margin-right:10px;" t-if="not shipping_order.has_changed and shipping_order.can_change"><button class="sub-butn">改泡</button></a>
+                            <a t-attf-href="/rebubbleno/shipping?order={{shipping_order.id}}" style="margin-right:10px;" t-elif="shipping_order.has_changed and shipping_order.can_change"><button class="sub-butn">取消改泡</button></a>
+                            <input type="hidden" id="order-id-btn" t-att-value="shipping_order.id"/>
+                            <button t-if="not shipping_order.has_returned" class="sub-butn" id="return-shipment">退运</button>
+                            <button t-else="" class="sub-butn">退运中</button>
+                          </div>
+                        </td>
+                        <td style="padding:0 5px;width:20%;"><a class="shippping-a" t-attf-href="/order/shipping/detail/{{shipping_order.id}}">查看详情</a></td>
+                    </tr>
+                </t>
+            </table>
+            <form action="/shpping/return/shipment" method="post" id="return-shipment-form">
+              <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                <input type="hidden" name="order_id" id="order-id"/>
+              <div id="return-shipment-street">
+                <div>退运信息</div>
+                <div>
+                  <div>
+                    <lable>退运收件人</lable>
+                    <input type="text" name="name"/>
+                  </div>
+                  <div>
+                    <lable>退运联系电话</lable>
+                    <input type="text" name="phone"/>
+                  </div>
+                  <div>
+                    <lable>退运地址</lable>
+                    <input type="text" name="address"/>
+                  </div>
+                </div>
+                <div style="display:flex;">
+                  <button type="submit" style="flex:1;" class="sub-butn">确定</button>
+                  <button type="button" style="flex:1;" id="clear-btn" class="sub-butn">取消</button>
+                </div>
+              </div>
+            </form>
+
+            <div style="margin:0 auto;padding:20px 0;text-align:center;">
+              <a href="#" class="shippping-a" onClick="javascript :history.back(-1)">返回上一页</a>
+            </div>
+        </t>
+    </template>
+</odoo>

@@ -1,0 +1,16 @@
+.oe_website_login_container{
+    position: relative;
+}
+.qrcode_login{
+    position: absolute;
+    top: 50px;
+    left: 62%;
+    bottom: 50px;
+}
+.qrcode_login img {
+    height: 100%
+}
+.qrcode_login p {
+    text-align: center;
+    font-size: 16px;
+}

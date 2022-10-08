@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+
+    <record id="action_shipping_bill" model="ir.actions.act_window">
+        <field name="name">运单</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">shipping.bill</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <record id="action_shipping_factor" model="ir.actions.act_window">
+        <field name="name">Shipping Factor</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">shipping.factor</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <record id="action_shipping_bill_out" model="ir.actions.act_window">
+        <field name="name">运单(待出库)</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">shipping.bill</field>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="shipping_bill_tree_out"/>
+        <field name="domain">[('sale_invoice_payment_state','=','支付已完成')]</field>
+    </record>
+
+    <record id="action_shipping_bill_arrived" model="ir.actions.act_window">
+        <field name="name">运单(站点)</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">shipping.bill</field>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="shipping_bill_tree_arrived"/>
+        <field name="domain">[('state','=','arrived')]</field>
+    </record>
+
+    <record id="action_shipping_bill_signed" model="ir.actions.act_window">
+        <field name="name">运单(签收)</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">shipping.bill</field>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="shipping_bill_tree_signed"/>
+        <field name="domain">[('state','=','signed')]</field>
+    </record>
+
+</odoo>
