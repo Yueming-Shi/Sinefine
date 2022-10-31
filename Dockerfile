@@ -5,5 +5,5 @@ RUN apt-get update && \
         python3-pip
 ADD ./etc/requirements.txt /tmp/
 RUN pip3 install pip --upgrade && \
-    pip3 install -r /tmp/requirements.txt
+    pip3 install --no-cache-dir -r /tmp/requirements.txt
 USER odoo

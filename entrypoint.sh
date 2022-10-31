@@ -30,6 +30,8 @@ check_config "db_port" "$PORT"
 check_config "db_user" "$USER"
 check_config "db_password" "$PASSWORD"
 
+echo "DB_ARGS=${DB_ARGS[@]}"
+
 case "$1" in
     -- | odoo)
         shift
@@ -37,11 +39,13 @@ case "$1" in
             exec odoo "$@"
         else
             wait-for-psql.py ${DB_ARGS[@]} --timeout=30
+            echo "odoo '$@' '${DB_ARGS[@]}'"
             exec odoo "$@" "${DB_ARGS[@]}"
         fi
         ;;
     -*)
         wait-for-psql.py ${DB_ARGS[@]} --timeout=30
+        echo "odoo '$@' '${DB_ARGS[@]}'"
         exec odoo "$@" "${DB_ARGS[@]}"
         ;;
     *)
