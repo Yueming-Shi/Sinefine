@@ -8,8 +8,6 @@ from odoo import api, fields, models
 class ResUsers(models.Model):
     _inherit = 'res.users'
 
-    team_id = fields.Many2one(comodel_name='crm.team')
-    
     def create_wechat_user(self, res, team_id):
         '''
          {'openid': 'oTgF4uPJGuYDVEOXE0Te6gpOtYMI', 
@@ -31,7 +29,8 @@ class ResUsers(models.Model):
                 'groups_id': [(4, self.env.ref('base.group_portal').id)]
             }
             team_id = int(team_id)
-            if team_id:
-                val.update({'team_id': team_id})
+            if not team_id:
+                team_id = self.env['crm.team'].sudo().search([], limit=1).id
+            val.update({'team_id': team_id})
             user = self.with_user(1).create(val)
         return user

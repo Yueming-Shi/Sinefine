@@ -19,10 +19,10 @@ class ShippingBillUpdateDiscardWizard(models.TransientModel):
             _datas = data.split('\t')
             if len(_datas) != 1:
                 raise UserError(f'第{i+1}次 数据异常')
-            name = _datas
+            name = _datas[0]
             name = name.strip()
 
-            shipping_bill = self.env['shipping.bill'].search([('name','=',name),('state','=','returned')],limit=1)
+            shipping_bill = self.env['shipping.bill'].search([('name','=',name),],limit=1)
 
             if not shipping_bill:
                 raise UserError(f'未找到 {name} 的单据')

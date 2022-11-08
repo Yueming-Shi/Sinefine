@@ -8,35 +8,37 @@ _logger = logging.getLogger(__name__)
 
 class ShippingBill(models.Model):
     _name = 'shipping.bill'
+    _inherit = 'mail.thread'
     _description = 'Shipping Bill'
 
     state = fields.Selection([('draft','草稿'),('paired','已匹配'),('valued','已计费'),
                               ('returned','已退运'),('transported','已转运'),('arrived','已到站点'),
                               ('signed','已签收'),('discarded','丢弃')],default='draft',string='状态')
 
-    ref = fields.Char(string='参考号（每天）')
+    ref = fields.Char(string='参考号（每天）',copy=False)
 
     # 草稿
-    in_date = fields.Date(string='入库日期')
-    name = fields.Char('运单号')
-    length = fields.Float(string='长度(cm)')
-    width = fields.Float(string='宽度(cm)')
-    height = fields.Float(string='高度(cm)')
-    actual_weight = fields.Float('实际重量(KG)', digits=(10, 1))
+    in_date = fields.Date(string='入库日期',tracking=True,)
+    name = fields.Char('运单号',copy=False,tracking=True,)
+    picking_code = fields.Char('仓库取件码',copy=False,tracking=True,)
+    length = fields.Float(string='长度(cm)',tracking=True,)
+    width = fields.Float(string='宽度(cm)',tracking=True,)
+    height = fields.Float(string='高度(cm)',tracking=True,)
+    actual_weight = fields.Float('实际重量(KG)', digits=(10, 1),tracking=True,)
     uom_id = fields.Many2one('uom.uom','单位')
-    shipping_factor_id = fields.Many2one('shipping.factor', '线路敏感性')
+    shipping_factor_id = fields.Many2one('shipping.factor', '线路敏感性', required=True,tracking=True,)
 
     # 已匹配
     sale_order_id = fields.Many2one('sale.order','销售单')
-    sale_fetch_no = fields.Char('取件码',related='sale_order_id.fetch_no',store=True)
+    sale_fetch_no = fields.Char('订单取件码',related='sale_order_id.fetch_no',store=True)
     sale_partner_id = fields.Many2one('res.partner','销售客户',related='sale_order_id.partner_id',store=True)
     sale_site_id = fields.Many2one(string='站点',related='sale_order_id.partner_team_site_id',store=True)
     sale_site_contact_address = fields.Char('站点地址',related='sale_order_id.partner_team_site_contact_address',store=True)
 
     # 已计费
-    size_weight = fields.Float('体积重')
-    fee = fields.Float(string='费用')
-    currency_id = fields.Many2one('res.currency','币种')
+    size_weight = fields.Float('计费重量',tracking=True,)
+    fee = fields.Float(string='费用',tracking=True,)
+    currency_id = fields.Many2one('res.currency','币种',tracking=True,)
 
     # 已付款
     sale_invoice_ids = fields.Many2many('account.move',string='结算单号',related='sale_order_id.invoice_ids')
@@ -97,8 +99,8 @@ class ShippingBill(models.Model):
             sale_order = selfs.env['sale.order'].search([('shipping_no','=',self.name),('shipping_bill_id','=',False)],limit=1)
             if not sale_order:
                 continue
-            sale_order.write({'shipping_bill_id': self.id,})
-            sale_order.set_fetch_no()
+            sale_order.write({'shipping_bill_id': self.id, 'fetch_no':self.picking_code})
+#            sale_order.set_fetch_no()
             self.write({'sale_order_id':sale_order.id, 'state':'paired'})
 
     def multi_action_compute(selfs):
@@ -156,6 +158,20 @@ class ShippingBill(models.Model):
             so.action_confirm()
             invoice = so._create_invoices(True)
             invoice.action_post()
+
+    @api.constrains('name')
+    def check_name_unique(selfs):
+        for self in selfs:
+            if self.name:
+                if selfs.search_count([('name','=',self.name),('id','!=',self.id)]):
+                    raise UserError(f'运单号= {self.name} 已存在')
+                    
+    @api.constrains('picking_code')
+    def check_picking_code_unique(selfs):
+        for self in selfs:
+            if self.picking_code:
+                if selfs.search_count([('picking_code','=',self.picking_code),('id','!=',self.id)]):
+                    raise UserError(f'取件码= {self.picking_code} 已存在')
 
     @api.constrains('ref')
     def check_ref_unique(selfs):

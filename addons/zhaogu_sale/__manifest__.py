@@ -3,7 +3,7 @@
 {
     'name': 'zhaogu_sale',
     'depends': [
-        'sale','shipping_bills'
+        'sale','shipping_bills','website',
     ],
     'data': [
         'security/ir.model.access.csv',

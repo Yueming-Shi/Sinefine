@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <!--待认领-->
-    <template id="web_zhaogu_advance.web_zhaogu_be_claimed_tree" name="待认领">
+    <template id="web_zhaogu_advance.web_zhaogu_be_claimed_tree" name="待认领订单">
         <t t-call="website.layout">
           <meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
             <link rel="stylesheet" type="text/css" href="/web_zhaogu_advance/static/src/css/portal_orders.css"/>

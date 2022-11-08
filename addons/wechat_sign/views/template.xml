@@ -9,17 +9,24 @@
         </xpath>
         <xpath expr="//div[hasclass('field-confirm_password')]" position="after">
             <t t-if="baes_url.find('trans.sinefine.store') > 1">
+    
+          
             <div class="form-group teams">
-                
                 <label for="teams">站点</label>
-                <select class="custom-select" id="teams" name="site_id" >
-                    <option >Choose...</option>
+                <select class="custom-select" id="teams"  disabled="1">
                     <t t-foreach="teams" t-as="team">
-                        <option t-att-value="team.id" t-att-selected="site_id and team.id==int(site_id)"><t t-esc="team.name" /></option>
+                        <option t-if="site_id and team.id==int(site_id)" t-att-value="team.id" t-att-selected="site_id and team.id==int(site_id)"><t t-esc="team.name" /></option>
+                        <option t-else="" t-att-value="team.id" t-att-selected="team__index == 1"><t t-esc="team.name" /></option>
                     </t>
                 </select>
+
+                <t t-foreach="teams" t-as="team">
+                    <input t-if="site_id and team.id==int(site_id)" t-att-value="team.id" name="site_id" />
+                    <input t-elif="team__index == 1" t-att-value="team.id" name="site_id"  />
+                </t>
             </div>
             </t>
+            
         </xpath>
         
     </template>
@@ -27,7 +34,9 @@
         <xpath expr="//form[@class='oe_login_form']" position="after">
             <!-- Add your fields here -->
             <div class="qrcode_login">
-            <image src="/wechat_sign/static/src/images/wechat_login.png" />
+           
+            <image
+            t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s' % ('QR', '%sweb/signup' % request.httprequest.url_root, 120, 120)" />
             <p>微信扫码快速登录</p>
             </div>
         </xpath>
@@ -36,11 +45,11 @@
         <t t-call="web.frontend_layout">
             <div id="wrap">
                 <div class="container" style="padding-top:50px">
-                    <t t-if="not sites">
+                    <t t-if="not teams">
                  <p>There are currently no Teams.</p>
                 </t>
-                <t t-if="sites">
-                    <ul class="list-unstyled" t-foreach="sites" t-as="team">
+                <t t-if="teams">
+                    <ul class="list-unstyled" t-foreach="teams" t-as="team">
                         <li class="media">
                             <div class="media-body">
                                 <h5 class="mt-0 mb-1" t-esc="team.name"></h5>

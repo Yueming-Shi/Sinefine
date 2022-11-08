@@ -4,115 +4,125 @@
     <template id="web_zhaogu_advance.web_zhaogu_shipping_detail_form" name="运单详情">
         <t t-call="website.layout">
           <meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
-          <link rel="stylesheet" type="text/css" href="/web_zhaogu_advance/static/src/css/portal_orders.css"/>
+          <link rel="stylesheet" type="text/css" href="/web_zhaogu_advance/static/src/css/portal_orders_detail.css"/>
           <div id="wrap">
-            <div style="height:60px;line-height:60px;text-align:center;">
-                <span style="font-weight:bold;font-size:24px;">运单详情</span>
+            <t t-set="shipping" t-value="sale_order.shipping_bill_id"/>
+            <div style="height:60px;line-height:60px;text-align:center;" class="row">
+                <div style="font-size:30px;font-weight:200" class="col-4"><a style="color:black;" href="javascript:history.back(-1)">&lt;</a></div>
+                <div style="font-weight:bold;font-size:24px;" class="col-4">运单详情</div>
+                <div class="col-4"/>
             </div>
-            <div style="margin: 0 20px;">
-              <div>
-                <span>包裹快递单号：<span t-field="shipping_order.name"/></span>
-              </div>
-              <div t-if="shipping_order.state not in ['valued', 'returned']">
-                <span>站点编号：<span t-field="shipping_order.sale_site_id.name"/></span>
-              </div>
-              <div t-if="shipping_order.state in ['arrived', 'signed']">
-                <span>取件码：<span t-field="shipping_order.sale_fetch_no"/></span>
-              </div>
-              <div t-if="shipping_order.state == 'valued'">
-                <span>是否购买保险：
-                  <t t-if="shipping_order.has_bought_safety">
-                      <span>是</span>
-                  </t>
-                  <t t-else="">
-                      <span>否</span>
-                  </t>
-                </span>
-              </div>
-              <div t-if="shipping_order.state in ['valued','returned']">
-                <span>总费用：<t t-esc="shipping_order.fee"/></span>
-              </div>
-              <div t-if="shipping_order.state in ['valued','returned']">
-                <span>体积：<span t-esc="shipping_order.length * shipping_order.width * shipping_order.height"/></span>
-              </div>
-              <div t-if="shipping_order.state == 'valued'">
-                <span>入库日期：<span t-field="shipping_order.in_date"/></span>
-              </div>
-              <div t-if="shipping_order.state in ['valued','returned']">
-                <span>实重（kg）：<span t-field="shipping_order.actual_weight"/></span>
-              </div>
-              <div t-if="shipping_order.state in ['valued','returned']">
-                <span>包裹长度（cm）：<span t-field="shipping_order.length"/></span>
-              </div>
-              <div t-if="shipping_order.state in ['valued','returned']">
-                <span>包裹宽度（cm）：<span t-field="shipping_order.width"/></span>
-              </div>
-              <div t-if="shipping_order.state in ['valued','returned']">
-                <span>包裹高度（cm）：<span t-field="shipping_order.height"/></span>
-              </div>
-              <div t-if="shipping_order.state in ['valued','returned']">
-                <span>入库包裹内容：</span>
-              </div>
-              <div t-if="shipping_order.state == 'valued'">
-                <span>是否可改泡：
-                    <t t-if="shipping_order.can_change">
+            <div style="margin: 0 20px 20px 20px;" class="box-detail">
+                <div class="row">
+                  <div class="col-6">包裹快递单号：</div>
+                  <div class="col-6 text-right"><span t-field="sale_order.shipping_no"/></div>
+                </div>
+                <div class="row">
+                  <div class="col-6">物流商：</div>
+                  <div class="col-6 text-right" t-if="shipping.state == 'transported'"><span t-field="shipping.logistics"/></div>
+                </div>
+                <div class="row">
+                  <div class="col-6">国际物流追踪码：</div>
+                  <div class="col-6 text-right" t-if="shipping.state == 'transported'"><span t-field="shipping.tracking_no"/></div>
+                </div>
+                <div class="row">
+                  <div class="col-6">站点编号：</div>
+                  <div class="col-6 text-right" t-if="shipping.state not in ['valued', 'returned']"><span t-field="shipping.sale_site_id.name"/></div>
+                </div>
+                <div class="row">
+                  <div class="col-6">取件码：</div>
+                  <div class="col-6 text-right" t-if="shipping.state in ['arrived', 'signed']"><span t-field="shipping.sale_fetch_no"/></div>
+                </div>
+                <div class="row">
+                  <div class="col-6">是否购买保险：</div>
+                  <div class="col-6 text-right" t-if="shipping.state == 'valued'">
+                    <t t-if="shipping.has_bought_safety">
                       <span>是</span>
                     </t>
                     <t t-else="">
-                      <span>否</span>
+                        <span>否</span>
                     </t>
-                </span>
-              </div>
-              <div t-if="shipping_order.state == 'transported'">
-                <span>发货日期：<span t-field="shipping_order.out_date"/></span>
-              </div>
-              <div t-if="shipping_order.state == 'transported'">
-                <span>国际物流追踪码：<span t-field="shipping_order.tracking_no"/></span>
-              </div>
-              <div t-if="shipping_order.state == 'arrived'">
-                <span>站点签收状态：
-                <span t-if="shipping_order.arrived_date">已签收</span>
-                <span t-else="">未签收</span>
-              </span>
-              </div>
-              <div t-if="shipping_order.state == 'arrived'">
-                <span t-if="shipping_order.arrived_date">站点签收日期：<span t-field="shipping_order.arrived_date"/></span>
-              </div>
-              <div t-if="shipping_order.state == 'signed'">
-                <span>客户包裹签收：
-                  <span t-if="shipping_order.signed_date">已签收</span>
-                  <span t-else="">未签收</span>
-                </span>
-              </div>
-              <div t-if="shipping_order.state == 'signed'">
-                <span t-if="shipping_order.signed_date">客户签收日期：<span t-field="shipping_order.signed_date"/></span>
-              </div>
-
-              <div  t-if="shipping_order.state != 'arrived'">
-                <hr/>
-                <div style="text-align:center;">
-                  <span style="font-weight:bold;font-size:24px;">包裹内容</span>
+                  </div>
                 </div>
-                <hr/>
-                <table class="table-o">
-                    <t t-if="shipping_order.sale_order_id.order_line">
-                        <tr>
-                            <th>产品</th>
-                            <th>材质</th>
-                            <th>品牌</th>
-                            <th>数量</th>
-                        </tr>
-                        <t t-foreach="shipping_order.sale_order_id.order_line" t-as="line">
-                            <tr>
-                                <td><t t-esc="line.product_id.name"/></td>
-                                <td><t t-esc="line.product_material_id.name"/></td>
-                                <td><t t-esc="line.product_brand_id.name"/></td>
-                                <td><t t-esc="line.product_qty"/></td>
-                            </tr>
-                        </t>
-                    </t>
-                </table>
-              </div>
+                <div class="row">
+                  <div class="col-6">总费用：</div>
+                  <div class="col-6 text-right" t-if="shipping.state in ['valued','returned']"><t t-esc="'{0:,.2f}'.format(shipping.sale_invoice_ids[0].amount_total)"/></div>
+                </div>
+                <div class="row">
+                  <div class="col-6">体积：</div>
+                  <div class="col-6 text-right" t-if="shipping.state in ['valued','returned']"><span t-esc="shipping.length * shipping.width * shipping.height"/></div>
+                </div>
+                <div class="row">
+                  <div class="col-6">入库日期：</div>
+                  <div class="col-6 text-right" t-if="shipping.state == 'valued'"><span t-field="shipping.in_date" t-options="{'widget':'date'}"/></div>
+                </div>
+                <div class="row">
+                  <div class="col-6">实重（kg）：</div>
+                  <div class="col-6 text-right" t-if="shipping.state in ['valued','returned']"><span t-field="shipping.actual_weight"/></div>
+                </div>
+                <div class="row">
+                  <div class="col-6">包裹长度（cm）：</div>
+                  <div class="col-6 text-right" t-if="shipping.state in ['valued','returned']"><span t-field="shipping.length"/></div>
+                </div>
+                <div class="row">
+                  <div class="col-6">包裹宽度（cm）：</div>
+                  <div class="col-6 text-right" t-if="shipping.state in ['valued','returned']"><span t-field="shipping.width"/></div>
+                </div>
+                <div class="row">
+                  <div class="col-6">包裹高度（cm）：</div>
+                  <div class="col-6 text-right" t-if="shipping.state in ['valued','returned']"><span t-field="shipping.height"/></div>
+                </div>
+                <div class="row">
+                  <div class="col-6">是否可改泡：</div>
+                  <div class="col-6 text-right" t-if="shipping.state == 'valued'">
+                    <t t-if="shipping.can_change">
+                        <span>是</span>
+                      </t>
+                      <t t-else="">
+                        <span>否</span>
+                      </t>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-6">发货日期：</div>
+                  <div class="col-6 text-right" t-if="shipping.state == 'transported'"><span t-field="shipping.out_date"/></div>
+                </div>
+                <div class="row">
+                  <div class="col-6">站点签收状态：</div>
+                  <div class="col-6 text-right" t-if="shipping.state == 'arrived'">
+                    <span t-if="shipping.arrived_date">已签收</span>
+                    <span t-else="">未签收</span>
+                  </div>
+                  <span>
+                </span>
+                </div>
+                <div class="row">
+                  <div class="col-6">站点签收日期：</div>
+                  <div class="col-6 text-right" t-if="shipping.state == 'arrived'"><span t-if="shipping.arrived_date"><span t-field="shipping.arrived_date"/></span></div>
+                </div>
+                <div class="row">
+                  <div class="col-6">客户包裹签收：</div>
+                  <div class="col-6 text-right" t-if="shipping.state == 'signed'">
+                    <span t-if="shipping.signed_date">已签收</span>
+                    <span t-else="">未签收</span>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-6">客户签收日期：</div>
+                  <div class="col-6 text-right" t-if="shipping.state == 'signed'"><span t-if="shipping.signed_date"><span t-field="shipping.signed_date"/></span></div>
+                </div>
+                <div class="row">
+                  <div class="col-12">
+                    <div>入库包裹内容：</div>
+                    <div t-if="shipping.state in ['valued','returned']">
+                      <t t-foreach="shipping.sale_order_id.order_line" t-as="line">
+                     		<div t-if="line.product_id.detailed_type != 'service'" style="text-indent: 2em;">
+                     			<span t-esc="line_index + 1"/>: <span t-field="line.product_material_id.name"/> , <span t-field="line.product_brand_id.name"/>,<span t-field="line.product_sale_category_id.name"/>, <span t-field="line.product_qty"/><span t-field="line.product_uom.name"/>
+                     		</div>
+                     	</t>
+                    </div>
+                  </div>
+                </div>
 
             </div>
           </div>

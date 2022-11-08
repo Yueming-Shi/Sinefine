@@ -27,7 +27,7 @@ class ShippingBillUpdateReturnWizard(models.TransientModel):
             name, return_name = _datas
             name, return_name = name.strip(), return_name.strip(),  
 
-            shipping_bill = self.env['shipping.bill'].search([('name','=',name),('state','=','valued')],limit=1)
+            shipping_bill = self.env['shipping.bill'].search(['|',('name','=',name),('picking_code','=',name),('state','=','valued')],limit=1)
 
             if not shipping_bill:
                 raise UserError(f'未找到 {name} 的单据')

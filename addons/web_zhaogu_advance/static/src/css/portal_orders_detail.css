@@ -1,0 +1,13 @@
+a:active {
+  text-decoration: none;
+  }
+  a:focus {
+  text-decoration: none;
+  }
+.box-detail > div {
+  padding:15px 0;
+  border-bottom:1px solid #C0C0C0;
+}
+.box-detail > div > div:nth-child(2) {
+  color:#808A87;
+}

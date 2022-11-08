@@ -6,14 +6,15 @@
     """,
     'category': 'Hidden',
     'version':'1.0',
-    'depends':['base', 'web', 'website'],
+    'depends':['base', 'web', 'website', 'shipping_bills'],
     'data':[
-        "views/web_zhaogu_be_paid_view.xml",
-        "views/web_zhaogu_change_return_order_view.xml",
-        "views/web_zhaogu_shipped_view.xml",
-        "views/web_zhaogu_signed_view.xml",
+        # "views/web_zhaogu_be_paid_view.xml",
+        # "views/web_zhaogu_change_return_order_view.xml",
+        # "views/web_zhaogu_shipped_view.xml",
+        # "views/web_zhaogu_signed_view.xml",
         "views/web_zhaogu_shipping_detail_view.xml",
         "views/web_zhaogu_be_claimed_view.xml",
+        # "data/ir_config_parameter_token.xml",
     ],
     'qweb':[
 

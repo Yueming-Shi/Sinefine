@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-    <menuitem id="menu_product_brand" name="品牌" parent="sale.menu_sale_config" action="action_product_brand" />
+    <menuitem id="menu_product_brand" name="品牌" parent="stock.menu_stock_config_settings" action="action_product_brand" />
 
-    <menuitem id="menu_product_material" name="材质" parent="sale.menu_sale_config" action="action_product_material" />
+    <menuitem id="menu_product_material" name="材质" parent="stock.menu_stock_config_settings" action="action_product_material" />
 
-    <menuitem id="menu_product_sale_category" name="分类" parent="sale.menu_sale_config" action="action_product_sale_category" />
+    <menuitem id="menu_product_sale_category" name="分类" parent="stock.menu_stock_config_settings" action="action_product_sale_category" />
 
 
 

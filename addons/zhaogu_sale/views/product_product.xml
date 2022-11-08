@@ -9,7 +9,6 @@
             <field name="barcode" position="before">
                 <field name="sale_category_id"/>
                 <field name="material_id"/>
-                <field name="brand_id"/>
             </field>
         </field>
     </record>

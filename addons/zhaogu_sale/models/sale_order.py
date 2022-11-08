@@ -32,24 +32,20 @@ class SaleOrder(models.Model):
         brand_id = brand_id and int(brand_id) or False
         material_id = material_id and int(material_id) or False
 
-        product = self.env['product.product'].model_find_from_portal(sale_category_id, brand_id, material_id)
+        product = self.env['product.product'].model_find_from_portal(sale_category_id, material_id)
 
         if not order_line_id:
             self.write({'order_line':[(0,0,{
                 'product_id': product.id, 'product_uom': product.uom_id.id,
                 'product_uom_qty': qty, 'name': product.name,
-                'product_sale_category_id': product.sale_category_id.id,
-                'product_material_id': product.material_id.id,
-                'product_brand_id': product.brand_id.id,
+                'product_brand_id': brand_id,
             })]})
         else:
             sale_order_line = self.order_line.filtered(lambda l:str(l.id) == order_line_id)
             sale_order_line.write({
                 'product_id': product.id, 'product_uom': product.uom_id.id,
                 'product_uom_qty': qty, 'name': product.name,
-                'product_sale_category_id': product.sale_category_id.id,
-                'product_material_id': product.material_id.id,
-                'product_brand_id': product.brand_id.id,
+                'product_brand_id': brand_id.id,
             })
 
 

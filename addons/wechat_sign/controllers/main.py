@@ -1,24 +1,33 @@
 # -*- coding: utf-8 -*-
 import logging
-import requests
-import werkzeug
+import qrcode
+import base64
+from io import BytesIO
 from wechatpy.oauth import WeChatOAuth
 
-from odoo import api, http, SUPERUSER_ID, _
+from odoo import  http, _
 from odoo.http import request
 from odoo.addons.auth_signup.controllers.main import AuthSignupHome
-from odoo.addons.web.controllers.main import SIGN_UP_REQUEST_PARAMS, db_monodb, login_and_redirect
+from odoo.addons.web.controllers.main import SIGN_UP_REQUEST_PARAMS
 from odoo.addons.portal.controllers.portal import CustomerPortal, pager as portal_pager
-from odoo import registry as registry_get
-from werkzeug.exceptions import BadRequest
-from odoo.exceptions import AccessDenied
 
 
 SIGN_UP_REQUEST_PARAMS.update({'site_id'})
 _logger = logging.getLogger(__name__)
 
+
+
+def make_qrcode(self, qrurl):
+    """generate qrcode from url"""
+    img = qrcode.make(qrurl)
+    buffer = BytesIO()
+    img.save(buffer, format='PNG')
+    heximage = base64.b64encode(buffer.getvalue())
+    return "data:image/png;base64,{}".format(heximage.decode('utf-8'))
+http.HttpRequest.make_qrcode = make_qrcode
 class PortalAccount(CustomerPortal):
 
+    
     def _prepare_home_portal_values(self, counters):
         values = super()._prepare_home_portal_values(counters)
         if 'teams_count' in counters:
@@ -66,7 +75,9 @@ class AuthSignupHome(AuthSignupHome):
     def _wechat_instance(self, site_id=0):
         appid = request.env['ir.config_parameter'].sudo().get_param('wechat.appid')
         secret = request.env['ir.config_parameter'].sudo().get_param('wechat.appsecret')        
-        url = '%s/wechat/signin/%s' % (request.env['ir.config_parameter'].sudo().get_param('web.base.url'), site_id)
+        base_url = request.httprequest.url_root
+        url = '%swechat/signin/%s' % (base_url, site_id)
+       
         wechat_auth = WeChatOAuth(appid, secret, url, 'snsapi_userinfo')  
         return wechat_auth
 

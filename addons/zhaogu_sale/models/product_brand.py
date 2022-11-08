@@ -7,6 +7,6 @@ class ProductBrand(models.Model):
     _name = 'product.brand'
 
     name = fields.Char('名称')
-    is_blacklist = fields.Boolean('是黑名单')
+    is_in_blacklist = fields.Boolean('是黑名单')
 
 

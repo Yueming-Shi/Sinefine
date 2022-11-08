@@ -14,6 +14,7 @@
                 <field name="height"/>
                 <field name="actual_weight"/>
                 <field name="uom_id"/>
+                <field name="discarded_date"/>
             </tree>
         </field>
     </record>
@@ -40,6 +41,7 @@
                         <group name="11">
                             <field name="state"/>
                             <field name="name"/>
+                            <field name="picking_code"/>
                             <field name="in_date"/>
                             <field name="length"/>
                             <field name="width"/>
@@ -47,6 +49,7 @@
                             <field name="actual_weight"/>
                             <field name="uom_id"/>
                             <field name="shipping_factor_id"/>
+                            <field name="discarded_date" attrs="{'invisible':[('state','!=','discarded')]}"/>
                         </group>
                         <group name="12">
                             <field name="sale_order_id"/>
@@ -94,6 +97,10 @@
                         </group>
                     </group>
                 </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="message_ids"/>
+                </div>
             </form>
         </field>
     </record>

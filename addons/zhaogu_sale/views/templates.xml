@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <template id="sale_portal_fill_order_template">
+    <template id="sale_portal_fill_order_template" name="包裹预报">
         <t t-call="website.layout">
           <meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
             <link rel="stylesheet" type="text/css" href="/zhaogu_sale/static/src/css/fill_order.css"/>
@@ -43,8 +43,6 @@
                             <th>材质</th>
                             <th>品牌</th>
                             <th>数量</th>
-                            <th/>
-                            <th/>
                         </tr>
                         <t t-foreach="lines" t-as="line">
                             <tr>
@@ -52,27 +50,55 @@
                                 <td><t t-esc="line['product_material_name']"/></td>
                                 <td><t t-esc="line['product_brand_name']"/></td>
                                 <td><t t-esc="line['product_qty']"/></td>
-                                <td><a class="shippping-a" t-att-href="line['edit_url']">编辑</a></td>
-                                <td><a class="shippping-a" t-att-href="line['delete_url']">删除</a></td>
                             </tr>
                         </t>
                     </t>
                 </table>
                 <div style="display:flex;">
-                    <input type="submit" class="sub-butn" value="添加明细" formaction="/sale/portal/fill_order_line"/>
-                    <input type="submit" class="sub-butn" value="提交" formaction="/sale/portal/save"/>
+                	<t t-set="sale_order" t-value="request.env['sale.order'].browse(int(order_id))"/>
+                	<t t-if="not sale_order.shipping_bill_id">
+                		<input type="submit" t-if="not state" class="sub-butn" value="添加明细" formaction="/sale/portal/fill_order_line"/>
+                    	<input type="submit" t-if="not state" class="sub-butn" value="删除" formaction="/sale/portal/delete"/>
+                    	<input type="submit" t-if="not state" class="sub-butn" value="提交" formaction="/sale/portal/save"/>
+                	</t>
                 </div>
             </form>
-            <div style="margin:0 auto;padding:20px 0;text-align:center;">
-              <a class="shippping-a" href="#" onClick="javascript :history.back(-1)">返回上一页</a>
-            </div>
         </t>
     </template>
 
-    <template id="sale_portal_fill_order_create_template">
+    <template id="sale_portal_fill_order_create_template" name="包裹预报">
         <t t-call="website.layout">
           <meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
             <link rel="stylesheet" type="text/css" href="/zhaogu_sale/static/src/css/fill_order.css"/>
+            <script crossorigin="anonymous" integrity="sha512-n/4gHW3atM3QqRcbCn6ewmpxcLAHGaDjpEBu4xZd47N0W2oQ+6q7oc3PXstrJYXcbNU1OHdQ1T7pAP+gi5Yu8g==" src="https://lib.baomitu.com/jquery/3.6.0/jquery.js"/>
+            <script>
+            	$(document).ready(function() {
+              	$('.clear-button').click(function() {
+                  $('#pop-up-permission').css('display','none')
+                })
+            		$('#sub-mit-btn').click(function() {
+	            		let data = {
+      				      csrf_token: $('#csrf-token').val(),
+      				    }
+            			$.ajax({
+				          type:"post",
+				          url: '/user/detail/edit',
+				          data: data,
+				          async:true,
+				          success:function(res){
+				            if (res == '200') {
+                      $('#sub-mit-btn-ok').click()
+				           } else {
+				             $('#pop-up-permission').css('display', 'block')
+				           }
+				          },
+				          error: function (xhr, textStatus, errorThrown) {
+				
+				          }
+				          })
+            		})
+            	})
+            </script>
             <div style="height:60px;line-height:60px;text-align:center;">
                 <span style="font-weight:bold;font-size:24px;">包裹预报</span>
             </div>
@@ -92,7 +118,7 @@
                     <span class="s_website_form_mark" style="color:#1A67FF;"> *</span>
                     <div class="row">
                         <div class="col-12">
-                            <input type="text" name="shipping_no" t-att-value="waybill_no" class="form-control-input form-control-sm"/>
+                            <input type="text" name="shipping_no" t-att-value="waybill_no" t-att-readonly="waybill_no" class="form-control-input form-control-sm"/>
                         </div>
                     </div>
                 </div>
@@ -103,16 +129,30 @@
                     </div>
                 </t>
                 <div style="display:flex;">
-                    <input type="submit" class="sub-butn" value="提交"/>
+                    <input type="button" id="sub-mit-btn" class="sub-butn" value="提交"/>
+                    <input style="display:none;" type="submit" id="sub-mit-btn-ok" class="sub-butn" value="提交"/>
                 </div>
             </form>
-            <div style="margin:0 auto;padding:20px 0;text-align:center;">
-              <a class="shippping-a" href="#" onClick="javascript :history.back(-1)">返回上一页</a>
+            <div id="pop-up-permission" class="pop-up-permission">
+              <div class="pop-header">提示</div>
+              <div class="pop-body">
+                为了更好的为您服务，请您如实填写您的个人信息。
+              </div>
+              <div class="pop-footer row">
+                <div class="col-6">
+                  <a href="/my/account">
+                    <span class="submit-button">确认</span>
+                  </a>
+                </div>
+                <div class="col-6">
+                  <span class="submit-button clear-button">取消</span>
+                </div>
+              </div>
             </div>
         </t>
     </template>
 
-    <template id="sale_portal_fill_order_line_template">
+    <template id="sale_portal_fill_order_line_template" name="添加明细行">
         <t t-call="website.layout">
         <script crossorigin="anonymous" integrity="sha512-n/4gHW3atM3QqRcbCn6ewmpxcLAHGaDjpEBu4xZd47N0W2oQ+6q7oc3PXstrJYXcbNU1OHdQ1T7pAP+gi5Yu8g==" src="https://lib.baomitu.com/jquery/3.6.0/jquery.js">
           </script>
@@ -122,6 +162,7 @@
         <script>
           $(document).ready(function(){
             $('#product-brand-id').select2()
+            $('#sale-category-id').select2()
           })
         </script>
         <style>
@@ -155,11 +196,11 @@
                     </div>
                 </div>
                 <div class="form-group field-name">
-                    <label for="name">销售分类</label>
+                    <label for="name">产品:</label>
                     <span class="s_website_form_mark" style="color:#1A67FF;"> *</span>
                     <div class="row">
                         <div class="col-12">
-                          <select name="sale_category_id" class="form-control-input form-control-sm">
+                          <select name="sale_category_id" id="sale-category-id" class="form-control-input form-control-sm">
                               <option value="0"/>
                               <option t-foreach="sale_categories" t-as="category" t-att-value="category[0]" t-esc="category[1]" t-att-selected="str(category[0])==str(sale_category_id)"/>
                           </select>
@@ -212,33 +253,99 @@
         </t>
     </template>
 
-    <template id="sale_portal_orders_template">
+    <template id="sale_portal_orders_template" name="我的订单">
         <t t-call="website.layout">
-          <meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
-            <link rel="stylesheet" type="text/css" href="/zhaogu_sale/static/src/css/portal_orders.css"/>
+            <meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+            <script src="https://lib.sinaapp.com/js/jquery/2.0.2/jquery-2.0.2.min.js"/>
+            <link rel="stylesheet" type="text/css" href="/zhaogu_sale/static/src/css/sale_portal_orders.css"/>
+            <script src="/zhaogu_sale/static/src/js/sale_portal_orders.js"/>
             <div style="height:60px;line-height:60px;text-align:center;">
-                <span style="font-weight:bold;font-size:24px;">已登记订单</span>
+                <span style="font-weight:bold;font-size:24px;">我的订单</span>
             </div>
-            <table class="table-o">
-                <tr>
-                    <th>包裹快递单号</th>
-                    <th>站点编号</th>
-                    <th>预报日期</th>
-                    <th/>
-                </tr>
-                <t t-foreach="sale_orders" t-as="sale_order">
-                    <tr>
-                        <td><t t-esc="sale_order.shipping_no"/></td>
-                        <td><t t-esc="sale_order.partner_team_site_id.name"/></td>
-                        <td><t t-esc="sale_order.create_date.strftime('%Y-%m-%d')"/></td>
-<!--                        <td><a t-att-href="sale_order.get_base_url()+'/sale/portal/fill_order?order_id='+str(sale_order.id)">跳转</a></td>-->
-                        <td><a class="shippping-a" t-att-href="'/sale/portal/fill_order?order_id='+str(sale_order.id)">跳转</a></td>
-                    </tr>
+            <div class="order-type-div">
+                <div><a href="/sale/portal/orders?ytype=all" class="all">全部</a></div>
+                <div><a href="/sale/portal/orders?ytype=draft" class="drk">待入库</a></div>
+                <div><a href="/sale/portal/orders?ytype=valuedno" class="dzf">待支付</a></div>
+                <div><a href="/sale/portal/orders?ytype=valued" class="dfh">待发货</a></div>
+                <div><a href="/sale/portal/orders?ytype=arrived" class="dqs">待签收</a></div>
+            </div>
+            <div class="order-div">
+                <t t-foreach="sale_orders.sorted(key=lambda ml: ml.create_date, reverse=True)" t-as="line">
+                    <div class="order-div-line">
+                        <div class="order-div-line-header row">
+                            <div class="col-6">运单号：<span t-esc="line.shipping_no"/></div>
+                            <div class="col-6 text-right">
+                                运单状态：
+                                <t t-if="line.shipping_bill_id">
+                                    <span t-if="line.shipping_bill_id.state in ['draft', 'paired']">待入库</span>
+                                    <span t-elif="line.shipping_bill_id.state == 'valued' and line.shipping_bill_id.sale_invoice_payment_state != '支付已完成'">待支付</span>
+                                    <span t-elif="line.shipping_bill_id.state == 'valued' and line.shipping_bill_id.sale_invoice_payment_state == '支付已完成'">待发货</span>
+                                    <span t-elif="line.shipping_bill_id.state in ['arrived', 'transported']">待签收</span>
+                                    <span t-elif="line.shipping_bill_id.state == 'signed'">已签收</span>
+                                </t>
+                                <t t-else="">
+                                    <span>待入库</span>
+                                </t>
+
+                            </div>
+                        </div>
+                        <div class="order-div-line-body row">
+                            <div class="col-6">取件码：
+                                <span t-if="shipping_bill_id" t-esc="line.shipping_bill_id.picking_code"/>
+                            </div>
+                            <div class="col-6 text-right">价格：
+                                <span t-if="line.shipping_bill_id and line.shipping_bill_id.sale_invoice_ids" t-esc="line.shipping_bill_id.sale_invoice_ids[0].amount_total"/>
+                                <span t-else="">待计算</span>
+                            </div>
+                        </div>
+                        <div class="order-div-line-body">
+                            <t t-if="line.shipping_bill_id and line.shipping_bill_id.state == 'valued'">
+                                <div style="display:flex;">
+                                    <input type="hidden" id="order-id-btn" t-att-value="line.shipping_bill_id.id"/>
+                                    <div><a t-attf-href="/payment/shipping?order={{line.shipping_bill_id.id}}" style="margin-right:10px;"><button class="sub-butn">支付</button></a></div>
+                                    <div>
+                                        <a t-attf-href="/rebubble/shipping?order={{line.shipping_bill_id.id}}" style="margin-right:10px;" t-if="not line.shipping_bill_id.has_changed and line.shipping_bill_id.can_change"><button class="sub-butn">改泡</button></a>
+                                        <button t-else="" class="sub-butn">已改泡</button></div>
+                                    <div>
+                                        <input type="hidden" t-att-value="line.shipping_bill_id.id" id="order-id-btn"/>
+                                        <button t-if="not line.shipping_bill_id.has_returned" class="sub-butn" id="return-shipment">退运</button>
+                                        <button t-else="" class="sub-butn">退运中</button>
+                                    </div>
+                                </div>
+                            </t>
+                        </div>
+                        <hr style="margin:0;"/>
+                        <div class="order-div-line-foot">
+                            <div><a t-attf-href="/order/shipping/detail/{{line.id}}">查看详情</a></div>
+                        </div>
+                    </div>
                 </t>
-            </table>
-            <div style="margin:0 auto;padding:20px 0;text-align:center;">
-              <a href="#" class="shippping-a" onClick="javascript :history.back(-1)">返回上一页</a>
             </div>
+            <form action="/shpping/return/shipment" method="post" id="return-shipment-form">
+                <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                <input type="hidden" name="order_id" id="order-id"/>
+                <div id="return-shipment-street">
+                    <div>退运信息</div>
+                    <div>
+                        <div>
+                            <lable>退运收件人</lable>
+                            <input type="text" name="name"/>
+                        </div>
+                        <div>
+                            <lable>退运联系电话</lable>
+                            <input type="text" name="phone"/>
+                        </div>
+                        <div>
+                            <lable>退运地址</lable>
+                            <input type="text" name="address"/>
+                        </div>
+                    </div>
+                    <div style="display:flex;">
+                        <button type="submit" style="flex:1;" class="sub-butn">确定</button>
+                        <button type="button" style="flex:1;" id="clear-btn" class="sub-butn">取消</button>
+                    </div>
+                </div>
+            </form>
         </t>
     </template>
 

@@ -11,13 +11,13 @@
     <menuitem id="menu_shipping_bills" name="物流订单" parent="root_menu_shipping_bills"
               action="action_shipping_bill" sequence="10"/>
 
-    <menuitem id="menu_shipping_bills_out" name="物流订单(待出库)" parent="root_menu_shipping_bills"
+    <menuitem id="menu_shipping_bills_out" name="订单(待出库)" parent="root_menu_shipping_bills"
               action="action_shipping_bill_out" sequence="20"/>
 
-    <menuitem id="menu_shipping_bills_arrived" name="物流订单(站点)" parent="root_menu_shipping_bills"
+    <menuitem id="menu_shipping_bills_arrived" name="订单(站点)" parent="root_menu_shipping_bills"
               action="action_shipping_bill_arrived" sequence="30"/>
 
-    <menuitem id="menu_shipping_bills_signed" name="物流订单(签收)" parent="root_menu_shipping_bills"
+    <menuitem id="menu_shipping_bills_signed" name="订单(签收)" parent="root_menu_shipping_bills"
               action="action_shipping_bill_signed" sequence="40"/>
 
 

@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-    <menuitem id="operation_menu_shipping_bills" name="物流订单(操作)" parent="root_menu_shipping_bills"/>
+    <menuitem id="operation_menu_shipping_bills" name="仓库操作(操作)" parent="root_menu_shipping_bills"/>
 
     <menuitem id="menu_shipping_bill_update_transport_wizard" name="导入出库大包裹号"
-        parent="operation_menu_shipping_bills" action="action_shipping_bill_update_transport_wizard"
+        parent="menu_shipping_bills_out" action="action_shipping_bill_update_transport_wizard"
               sequence="10"/>
 
-    <menuitem id="menu_shipping_bill_update_arrive_wizard" name="扫码到站"
-        parent="operation_menu_shipping_bills" action="action_shipping_bill_update_arrive_wizard"
+    <menuitem id="menu_shipping_bill_update_arrive_wizard" name="站点签收"
+        parent="menu_shipping_bills_arrived" action="action_shipping_bill_update_arrive_wizard"
               sequence="20"/>
 
-    <menuitem id="menu_shipping_bill_update_sign_wizard" name="扫码签收"
-        parent="operation_menu_shipping_bills" action="action_shipping_bill_update_sign_wizard"
+    <menuitem id="menu_shipping_bill_update_sign_wizard" name="客户签收"
+        parent="menu_shipping_bills_signed" action="action_shipping_bill_update_sign_wizard"
               sequence="20"/>
 
-    <menuitem id="menu_shipping_bill_update_return_wizard" name="扫码退运"
+    <menuitem id="menu_shipping_bill_update_return_wizard" name="包裹退运"
         parent="operation_menu_shipping_bills" action="action_shipping_bill_update_return_wizard"
               sequence="20"/>
 
-    <menuitem id="menu_shipping_bill_update_discard_wizard" name="扫码丢弃"
+    <menuitem id="menu_shipping_bill_update_discard_wizard" name="包裹丢弃"
         parent="operation_menu_shipping_bills" action="action_shipping_bill_update_discard_wizard"
               sequence="20"/>
 
